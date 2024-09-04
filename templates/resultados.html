@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Pesquisa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Resultados da Pesquisa</h1>
+    
+    {% if resultados %}
+        <table border="1">
+            <tr>
+                <th>ID do Processo</th>
+                <th>Nível de Sigilo</th>
+                <th>Órgão Julgador</th>
+                <th>Município IBGE</th>
+                <th>Código Movimento</th>
+                <th>Nome Movimento</th>
+                <th>Data Movimento</th>
+                <th>Código Assunto</th>
+                <th>Nome Assunto</th>
+            </tr>
+            {% for processo in resultados %}
+            <tr>
+                <td>{{ processo['id'] }}</td>
+                <td>{{ processo['nivel_sigilo'] }}</td>
+                <td>{{ processo['orgao_julgador_nome'] }}</td>
+                <td>{{ processo['municipio_ibge'] }}</td>
+                <td>{{ processo['codigo_movimento'] }}</td>
+                <td>{{ processo['nome_movimento'] }}</td>
+                <td>{{ processo['data_hora_movimento'] }}</td>
+                <td>{{ processo['codigo_assunto'] }}</td>
+                <td>{{ processo['nome_assunto'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Nenhum resultado encontrado para a pesquisa.</p>
+    {% endif %}
+    
+    <a href="/">Voltar à Pesquisa</a>
+</body>
+</html>
