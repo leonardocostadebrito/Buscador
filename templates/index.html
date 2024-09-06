@@ -1,181 +1,64 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Pesquisa da 1ª Vara da Comarca de São Bento do Una</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #e8f0fe;
-            border-radius: 8px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            color: #555;
-        }
-        input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        button {
-            padding: 12px 18px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        th img {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-        .movimento {
-            font-size: 14px;
-            color: #555;
-        }
-        .filter-movements {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #007bff;
-            cursor: pointer;
-        }
-        .filter-movements:hover {
-            text-decoration: underline;
-        }
-        .detalhamento {
-            display: none;
-            margin-top: 10px;
-        }
-        .detalhamento h3 {
-            font-size: 16px;
-            color: #333;
-        }
-        .detalhamento ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .detalhamento li {
-            margin-bottom: 5px;
-        }
-    </style>
+    <title>Sistema de Pesquisa de Processos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Sistema de Pesquisa da 1ª Vara da Comarca de São Bento do Una</h1>
-        <form method="POST">
-            <label for="numero_processo">Número do Processo:</label>
-            <input type="text" id="numero_processo" name="numero_processo" placeholder="Ex: 0801234-56.2020.8.17.0999">
+    <div class="container mt-4">
+        <!-- Barra de Navegação com Opção de Retornar ao Menu Inicial -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Sistema de Pesquisa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
 
-            <label for="classe">Classe:</label>
-            <input type="text" id="classe" name="classe" placeholder="Ex: Ação Penal">
-
-            <label for="assunto">Assunto:</label>
-            <input type="text" id="assunto" name="assunto" placeholder="Ex: Crimes contra a vida">
-
-            <label for="movimento">Movimento (Código ou Nome):</label>
-            <input type="text" id="movimento" name="movimento" placeholder="Ex: 391 ou Recebimento de Denúncia">
-
-            <button type="submit">Buscar</button>
-            <button type="submit" name="exportar">Exportar para Excel</button>
+        <!-- Filtros de Pesquisa -->
+        <form method="POST" action="{{ url_for('index') }}" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="classe" class="form-label">Classe</label>
+                    <input type="text" class="form-control" id="classe" name="classe" placeholder="Digite a Classe">
+                </div>
+                <div class="col-md-3">
+                    <label for="assunto" class="form-label">Assunto</label>
+                    <input type="text" class="form-control" id="assunto" name="assunto" placeholder="Digite o Assunto">
+                </div>
+                <div class="col-md-3">
+                    <label for="movimento" class="form-label">Movimento</label>
+                    <input type="text" class="form-control" id="movimento" name="movimento" placeholder="Digite o Movimento">
+                </div>
+                <div class="col-md-3 align-self-end">
+                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Limpar Filtros</a>
+                </div>
+            </div>
         </form>
 
-        {% if processos %}
-        <h2>Resultados da Pesquisa</h2>
-        <table>
-            <tr>
-                <th>Número do Processo <img src="static/filter_icon.png" onclick="filtrarColuna('numero_processo')"></th>
-                <th>Classe <img src="static/filter_icon.png" onclick="filtrarColuna('classe')"></th>
-                <th>Assuntos <img src="static/filter_icon.png" onclick="filtrarColuna('assuntos')"></th>
-                <th>Autuação</th>
-                <th>Segredo de Justiça</th>
-                <th>Detalhamento</th>
-            </tr>
-            {% for processo in processos %}
-            <tr>
-                <td>{{ processo['Número do Processo'] }}</td>
-                <td>{{ processo['Classe'] }}</td>
-                <td>{{ processo['Assuntos'] }}</td>
-                <td>{{ processo['Autuação'] }}</td>
-                <td>{{ processo['Segredo de Justiça'] }}</td>
-                <td>
-                    <span class="filter-movements" onclick="mostrarDetalhamento('{{ processo['Número do Processo'] }}')">Detalhamento</span>
-                    <div id="detalhamento-{{ processo['Número do Processo'] }}" class="detalhamento">
-                        <h3>Cronologia</h3>
-                        <ul>
-                            {% for movimento in processo['Movimentos'] %}
-                            <li>{{ movimento['data'] }} - {{ movimento['descricao'] }} (Código: {{ movimento['codigo'] }})</li>
-                            {% endfor %}
-                        </ul>
-                        <h3>Movimentos</h3>
-                        <!-- Mais detalhes de movimentos podem ser adicionados aqui -->
-                        <h3>Fases</h3>
-                        <!-- Detalhes sobre as fases do processo -->
-                    </div>
-                </td>
-            </tr>
+        <!-- Exibindo a quantidade total de processos -->
+        <h4>Total de processos: {{ total_resultados }}</h4>
+
+        <!-- Processos por Classe -->
+        <h5 class="mt-4">Processos por Classe</h5>
+        <ul class="list-group">
+            {% for classe, quantidade in contagem_classes.items() %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('processos_por_classe', classe_nome=classe) }}" class="text-decoration-none">{{ classe }}</a>
+                    <span class="badge bg-primary rounded-pill">{{ quantidade }}</span>
+                </li>
             {% endfor %}
-        </table>
-        {% endif %}
+        </ul>
+
     </div>
 
-    <script>
-        function mostrarDetalhamento(numeroProcesso) {
-            var detalhesDiv = document.getElementById('detalhamento-' + numeroProcesso);
-            if (detalhesDiv.style.display === 'none' || detalhesDiv.style.display === '') {
-                detalhesDiv.style.display = 'block';
-            } else {
-                detalhesDiv.style.display = 'none';
-            }
-        }
-
-        function filtrarColuna(coluna) {
-            alert('Filtragem pela coluna: ' + coluna + ' ainda não implementada.');
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
