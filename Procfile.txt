@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 web: python app.py
+=======
+web: gunicorn app:app
+>>>>>>> 2b49c0c2a38d23d33f7d1c875077bb0b2ff59535

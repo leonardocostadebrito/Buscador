@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Distribuição</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .hidden {
+            display: none;
+        }
+        .btn {
+            cursor: pointer;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Painel de Distribuição</h1>
+        <h2>Informações da Vara de São Bento do Una</h2>
+
+        <!-- Caixa de Pesquisa do Número do Processo -->
+        <input type="text" id="pesquisaProcesso" placeholder="Digite o número do processo" onkeyup="pesquisarProcesso()">
+        <button class="btn" onclick="baixarArquivo()">Baixar Dados</button>
+
+        <!-- Tabela de Processos -->
+        <table id="tabelaProcessos">
+            <thead>
+                <tr>
+                    <th>Número do Processo</th>
+                    <th>Primeira Distribuição</th>
+                    <th>Redistribuição Entrada</th>
+                    <th>Redistribuição Saída</th>
+                    <th>Saldo</th>
+                    <th>Movimentos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Processos listados (exemplo) -->
+                <tr>
+                    <td onclick="mostrarDetalhes(this)">2024-12345</td>
+                    <td>432</td>
+                    <td>43</td>
+                    <td>21</td>
+                    <td>454</td>
+                    <td class="hidden">
+                        <!-- Movimentos ocultos, mostrados ao clicar -->
+                        <ul>
+                            <li>Distribuído: 05/01/2024</li>
+                            <li>Redistribuído: 15/02/2024</li>
+                            <li>Arquivado: 20/06/2024</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="mostrarDetalhes(this)">2024-54321</td>
+                    <td>550</td>
+                    <td>60</td>
+                    <td>30</td>
+                    <td>580</td>
+                    <td class="hidden">
+                        <ul>
+                            <li>Distribuído: 02/03/2024</li>
+                            <li>Julgado: 22/05/2024</li>
+                        </ul>
+                    </td>
+                </tr>
+                <!-- Mais processos podem ser listados dinamicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function mostrarDetalhes(celula) {
+            var detalhes = celula.parentElement.querySelector('td.hidden');
+            if (detalhes) {
+                detalhes.classList.toggle('hidden');
+            }
+        }
+
+        function pesquisarProcesso() {
+            var input = document.getElementById("pesquisaProcesso");
+            var filtro = input.value.toUpperCase();
+            var tabela = document.getElementById("tabelaProcessos");
+            var linhas = tabela.getElementsByTagName("tr");
+
+            for (var i = 1; i < linhas.length; i++) {
+                var celula = linhas[i].getElementsByTagName("td")[0];
+                if (celula) {
+                    var txtValor = celula.textContent || celula.innerText;
+                    if (txtValor.toUpperCase().indexOf(filtro) > -1) {
+                        linhas[i].style.display = "";
+                    } else {
+                        linhas[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function baixarArquivo() {
+            alert("Arquivo baixado com sucesso! (Simulação)");
+        }
+    </script>
+</body>
+</html>
+
